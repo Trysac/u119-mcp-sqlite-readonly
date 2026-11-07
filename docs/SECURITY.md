@@ -1,28 +1,18 @@
-# Security practices
+# Security and Threat Model
 
-How this repository keeps the package and its users safe. The disclosure policy is in
-[../SECURITY.md](../SECURITY.md).
+`@trysac/mcp-sqlite-readonly` provides read-only access to SQLite database files. The threat model is built on defense-in-depth.
 
-## Secrets
+## Defended
 
-- No secrets, tokens or credentials in the repository, commit history, logs or prompts.
-- `gitleaks` runs as the last step of `npm run check` and as a dedicated CI job. Its configuration is
-  `.gitleaks.toml`.
-- Publishing credentials live only in the CI secret store or the maintainer's local npm configuration.
+1. **Writes reaching storage**: SQLite files are loaded into memory; there is no disk write-back mechanism.
+2. **Engine write operations**: `PRAGMA query_only = ON` is enforced; attempts to modify data or structure (including via CTEs) fail at the engine level.
+3. **Multiple SQL statements**: Statements are validated to be single-statement only; chaining commands (e.g., `SELECT 1; DROP TABLE t;`) is blocked.
+4. **Non-query keywords**: `ATTACH`, `PRAGMA` modifications, `VACUUM`, and other management commands are explicitly blocked by `checkSql`.
+5. **SQL Injection**: Parameter binding uses `Statement.bind()`; interpolation is not used.
+6. **Resource Exhaustion**: Hard limits on rows, cell size, and total payload bytes prevent large query overflows.
 
-## Dependencies
+## Not Defended
 
-- Runtime dependencies are avoided; development dependencies are limited to the toolchain listed in
-  [STACK.md](STACK.md).
-- Dependabot opens weekly updates for npm packages and GitHub Actions.
-- Commit the generated `package-lock.json` so installs are reproducible.
-
-## Code
-
-- No `eval`, dynamic `Function` construction or shelling out from library code.
-- Inputs from callers are validated and rejected with explicit errors.
-
-## Publishing
-
-- Packages are published from a clean checkout after `npm run check` passes.
-- Only `dist/` is included in the published tarball.
+1. **CPU/Memory exhaustion**: SQLite does not support query interruption; long-running joins cannot be cancelled.
+2. **Confidentiality**: All tables and columns within the loaded file are accessible to the connected agent.
+3. **Side channels**: Query execution time variations are not masked.

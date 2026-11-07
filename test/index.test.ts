@@ -1,12 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { greet } from "../src/index.js";
+import { checkSql, createServer, openDatabase, SqliteMcpError } from "../src/index.js";
 
-describe("greet", () => {
-  it("greets a trimmed name", () => {
-    expect(greet("  Ada ")).toBe("Hello, Ada!");
-  });
-
-  it("rejects an empty name", () => {
-    expect(() => greet("   ")).toThrow(TypeError);
+describe("public exports", () => {
+  it("exports core APIs", () => {
+    expect(typeof openDatabase).toBe("function");
+    expect(typeof createServer).toBe("function");
+    expect(typeof checkSql).toBe("function");
+    expect(typeof SqliteMcpError).toBe("function");
   });
 });

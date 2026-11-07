@@ -1,33 +1,27 @@
-# Project record: mcp-sqlite-readonly
+# Project Record: @trysac/mcp-sqlite-readonly
 
-## Objective
+- **Objective**: Provide a secure, read-only SQLite MCP server that strictly bounds resources and enforces read-only access at the engine layer.
+- **Scope**: Includes loading SQLite database binary files in-memory, providing read-only MCP tools (list_tables, describe_table, query), and enforcing strict SQL validation.
+- **Out-of-Scope**: Database write operations, support for database engines other than SQLite, schema introspection beyond table_info, and Streamable HTTP transport.
 
-Read-only MCP server over a SQLite file loaded into memory with sql.js: query_only pragma, single SELECT statements, bound parameters, row, cell and size caps
+## Effort Table
 
-State the measurable outcome this utility must deliver and who it is for.
+| Task | Effort |
+| :--- | :--- |
+| Core Logic Implementation | pending measurement |
+| Test Suite Coverage | pending measurement |
+| Security hardening | pending measurement |
 
-## Scope
+## Factory run u119 (measured from API usage)
 
-In scope:
+| Phase | Model | Batch | Input | Output | Cache write | Cache read | Cost (USD) |
+|---|---|---|---|---|---|---|---|
+| generation | gemini-3.8-flash | yes | 4733 | 14572 | 0 | 0 | 0.0291 |
+| fix-1 | gemini-3.8-flash | no | 63855 | 1169 | 0 | 441674 | 0.0854 |
+| fix-2 | gemini-3.8-flash | no | 33865 | 970 | 0 | 65150 | 0.0339 |
+| fix-3 | gemini-3.8-flash | no | 94820 | 1132 | 0 | 876736 | 0.1411 |
+| fix-4 | gemini-3.8-flash | no | 101967 | 1080 | 0 | 678798 | 0.1314 |
+| audit | gemini-3.1-flash-lite | no | 43820 | 629 | 0 | 132420 | 0.0152 |
+| docs | gemini-3.1-flash-lite | no | 20711 | 1754 | 0 | 0 | 0.0078 |
 
-- The public API documented in the README.
-
-Out of scope:
-
-- List what this utility deliberately does not do.
-
-## Timeline
-
-| Date | Milestone |
-|---|---|
-| 2026 | Repository created from the factory utility template. |
-
-## Effort metrics
-
-Measured values only. Leave "pending measurement" until a real figure is recorded; never estimate here.
-
-| Metric | Value | Source |
-|---|---|---|
-| Tokens (input / output) | pending measurement | factory ledger |
-| Hours (human) | pending measurement | time log |
-| Cost (USD) | pending measurement | factory ledger |
+Total: $0.4440. Prices: Anthropic list prices.
