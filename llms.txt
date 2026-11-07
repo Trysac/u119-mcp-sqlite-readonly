@@ -1,17 +1,11 @@
 # @trysac/mcp-sqlite-readonly
 
-> Read-only MCP server over a SQLite file loaded into memory with sql.js: query_only pragma, single SELECT statements, bound parameters, row, cell and size caps TypeScript library for Node.js 20+, published as ES modules with type declarations. MIT.
+Read-only MCP server over a SQLite file loaded into memory: query_only pragma, single SELECT statements, bound parameters, row, cell and size caps. TypeScript library for Node.js 20+.
 
-## Docs
+## Documentation
 
-- [README](README.md): problem, installation and usage example
-- [AGENTS.md](AGENTS.md): commands, folder map, conventions and limits for contributors and agents
-- [Architecture](docs/ARCHITECTURE.md): modules and boundaries
-- [Testing](docs/TESTING.md): how tests and coverage work
-- [Decisions](docs/decisions/0001-record-architecture-decisions.md): architecture decision records
-
-## Optional
-
-- [Stack](docs/STACK.md): tools used and discarded
-- [Project record](docs/PROJECT.md): objective, scope, timeline and effort metrics
-- [Changelog](CHANGELOG.md)
+- [README](README.md): Problem, usage, and API.
+- [Architecture](docs/ARCHITECTURE.md): Layered defenses.
+- [Security](docs/SECURITY.md): Threat model.
+- [Testing](docs/TESTING.md): Coverage and strategy.
+- [Project](docs/PROJECT.md): Objective and scope.

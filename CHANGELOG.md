@@ -9,4 +9,5 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- Add read-only SQLite MCP server with query_only pragma, single-statement checks, and bounded output.
 - Initial project structure from the factory utility template.

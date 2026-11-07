@@ -1,20 +1,22 @@
 /**
  * Public entry point of @trysac/mcp-sqlite-readonly.
- *
- * Replace this placeholder with the utility's real API. Keep every export documented and covered by tests.
  */
 
-/**
- * Builds a greeting for `name`.
- *
- * @param name - Who to greet. Surrounding whitespace is ignored.
- * @returns The greeting, for example `"Hello, Ada!"`.
- * @throws {TypeError} When `name` is empty after trimming.
- */
-export function greet(name: string): string {
-  const trimmed = name.trim();
-  if (trimmed === "") {
-    throw new TypeError("name must not be empty");
-  }
-  return `Hello, ${trimmed}!`;
-}
+export {
+  type BlobCell,
+  type Column,
+  DEFAULT_MAX_CELL_CHARS,
+  DEFAULT_MAX_DB_BYTES,
+  DEFAULT_MAX_RESULT_BYTES,
+  DEFAULT_MAX_ROWS,
+  MAX_PARAMS_COUNT,
+  type OpenDatabaseOptions,
+  openDatabase,
+  type QueryCellValue,
+  type QueryOptions,
+  type QueryResult,
+  type ReadonlyDb,
+} from "./database.js";
+export { SqliteMcpError, type SqliteMcpErrorCode } from "./errors.js";
+export { type CreateServerOptions, createServer } from "./server.js";
+export { checkSql, MAX_SQL_LENGTH } from "./sql-check.js";

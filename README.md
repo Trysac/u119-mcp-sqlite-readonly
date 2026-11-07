@@ -1,55 +1,51 @@
-# mcp-sqlite-readonly
+# @trysac/mcp-sqlite-readonly
 
-[![npm version](https://img.shields.io/npm/v/@trysac/mcp-sqlite-readonly.svg)](https://www.npmjs.com/package/@trysac/mcp-sqlite-readonly)
-[![license: MIT](https://img.shields.io/npm/l/@trysac/mcp-sqlite-readonly.svg)](LICENSE)
-[![CI](https://github.com/Trysac/u119-mcp-sqlite-readonly/actions/workflows/ci.yml/badge.svg)](https://github.com/Trysac/u119-mcp-sqlite-readonly/actions/workflows/ci.yml)
+Read-only MCP server over a SQLite database file loaded into memory with sql.js.
 
-Read-only MCP server over a SQLite file loaded into memory with sql.js: query_only pragma, single SELECT statements, bound parameters, row, cell and size caps
+## The Problem
 
-## Problem
+Most SQLite MCP servers open real files with write access and rely on trust to ensure models only execute read-only queries. This package is read-only by construction, preventing accidental or malicious modification of your database files.
 
-Describe in two or three sentences the concrete problem this utility solves, who hits it, and why existing
-packages do not solve it well. Keep it factual; link to an issue or decision record when there is one.
+## Installation
 
-## Install
+Install the package as a dependency:
 
-```sh
+```bash
 npm install @trysac/mcp-sqlite-readonly
 ```
 
-Requires Node.js 20 or newer. The package ships ES modules with TypeScript declarations.
+## Usage Example
 
-## Usage
+```typescript
+import { openDatabase, createServer } from "@trysac/mcp-sqlite-readonly";
+import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import { readFile } from "node:fs/promises";
 
-```ts
-import { greet } from "@trysac/mcp-sqlite-readonly";
-
-// Build a greeting; surrounding whitespace is ignored.
-const message = greet("  Ada ");
-console.log(message); // "Hello, Ada!"
-
-try {
-  greet("   ");
-} catch (error) {
-  console.error((error as Error).message); // "name must not be empty"
-}
+const dbBytes = await readFile("sample.db");
+const db = await openDatabase(dbBytes);
+const server = createServer(db);
+await server.connect(new StdioServerTransport());
 ```
 
-## API
+## API Summary
 
-| Export | Signature | Description |
-|---|---|---|
-| `greet` | `(name: string) => string` | Placeholder API; replace it with the real one. |
+- `openDatabase(bytes: Uint8Array, opts?: { maxDbBytes?: number }): Promise<ReadonlyDb>`
+- `createServer(db: ReadonlyDb, opts?: { name?: string, version?: string }): McpServer`
+- `checkSql(sql: string): void` (Validates read-only keywords: SELECT/WITH)
+- `SqliteMcpError`: Thrown for `NOT_READ_ONLY`, `MULTIPLE_STATEMENTS`, `SQL_ERROR`, `UNKNOWN_TABLE`, `TOO_LARGE`, `INVALID_PARAMS`.
 
-## Development
+### Limits
 
-```sh
-npm install
-npm run check   # lint, format, types, tests with coverage, docs, secrets
-```
+- **maxDbBytes**: Default 100 MiB.
+- **maxRows**: Default 1,000.
+- **maxResultBytes**: Default 1 MiB.
+- **maxCellChars**: Default 10,000.
+- **MAX_PARAMS_COUNT**: 100.
 
-See [AGENTS.md](AGENTS.md) for the full command list and [CONTRIBUTING.md](CONTRIBUTING.md) for the workflow.
+## Why not the reference SQLite MCP server?
 
-## License
+Unlike reference implementations that trust the model to behave, this library enforces read-only access via the SQLite engine and loader, rather than relying on model prompt compliance.
 
-[MIT](LICENSE) © 2026 Miguel Gomez
+## Security
+
+See [docs/SECURITY.md](docs/SECURITY.md) for the threat model and defense boundaries.
