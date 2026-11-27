@@ -10,9 +10,15 @@ Most SQLite MCP servers open real files with write access and rely on trust to e
 
 Install the package as a dependency:
 
-```bash
-npm install @trysac/mcp-sqlite-readonly
+Not published to npm yet. Build it from a clone, then install it from the local path:
+
+```sh
+git clone https://github.com/Trysac/u119-mcp-sqlite-readonly.git
+cd u119-mcp-sqlite-readonly && npm ci && npm run build
+cd ../your-project && npm install ../u119-mcp-sqlite-readonly
 ```
+
+Imports keep the package name: `import { ... } from "@trysac/mcp-sqlite-readonly"`.
 
 ## Usage Example
 
